@@ -111,11 +111,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\EASYBMP\EasyBMP.cpp" />
     <ClCompile Include="..\src\FFT.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\EASYBMP\EasyBMP.h" />
+    <ClInclude Include="..\EASYBMP\EasyBMP_BMP.h" />
+    <ClInclude Include="..\EASYBMP\EasyBMP_DataStructures.h" />
+    <ClInclude Include="..\EASYBMP\EasyBMP_VariousBMPutilities.h" />
     <ClInclude Include="..\header\FFT.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\EASYBMP\EasyBMP_ChangeLog.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
