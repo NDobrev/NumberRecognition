@@ -34,8 +34,12 @@ void BasicDrawPane::keyPressed(wxKeyEvent& event) {}
 void BasicDrawPane::keyReleased(wxKeyEvent& event) {}
 */
 
-BasicDrawPane::BasicDrawPane(wxFrame* parent) :
-	wxPanel(parent)
+BasicDrawPane::BasicDrawPane(wxWindow* parent) :
+	wxPanel(parent,-1, wxDefaultPosition, wxSize(300, 300))
+{
+}
+
+BasicDrawPane::~BasicDrawPane()
 {
 }
 
@@ -53,10 +57,18 @@ void BasicDrawPane::paintNow()
 
 void BasicDrawPane::render(wxDC&  dc)
 {
+	if (mBmp.IsOk())
+		dc.DrawBitmap(mBmp, 0,0);
+}
+
+
+bool BasicDrawPane::OnLoadImage(wxString &rPath)
+{
+
 	wxImageHandler * bmpLoader = new wxBMPHandler();
 	wxImage::AddHandler(bmpLoader);
-
-	wxImage bmp("C:\\Users\\Martin\\Desktop\\Projects\\NumberRecognition\\FFTNN\\panda.bmp", wxBITMAP_TYPE_BMP);
-	if(bmp.IsOk())
-		dc.DrawBitmap(bmp, 0,0);
+	mBmp.LoadFile(rPath, wxBITMAP_TYPE_BMP);
+	paintNow();
+	//delete bmpLoader;
+	return mBmp.IsOk();
 }

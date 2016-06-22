@@ -31,5 +31,11 @@
     <ClInclude Include="..\header\DrawPane.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\header\BinaryImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\header\LearningData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
