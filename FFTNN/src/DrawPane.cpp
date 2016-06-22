@@ -35,7 +35,7 @@ void BasicDrawPane::keyReleased(wxKeyEvent& event) {}
 */
 
 BasicDrawPane::BasicDrawPane(wxWindow* parent) :
-	wxPanel(parent,-1, wxDefaultPosition, wxSize(300, 300))
+	wxPanel(parent,-1, wxDefaultPosition, wxSize(300, 300), wxBORDER_SIMPLE)
 {
 }
 

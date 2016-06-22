@@ -48,6 +48,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	: wxFrame(NULL, wxID_ANY, title, pos, size)
 	, pCanvas(new BasicDrawPane(this))
 {
+	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+	sizer->Add(pCanvas);
+	SetSizer(sizer);
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(ID_FilePick, "&Open file\tCtrl-O");
 	menuFile->AppendSeparator();
