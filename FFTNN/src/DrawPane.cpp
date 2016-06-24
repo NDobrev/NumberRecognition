@@ -2,8 +2,8 @@
 #include "wx/sizer.h"
 
 #include "../header/DrawPane.h"
-
-
+#include "../header/BinaryImage.h"
+#include "../header/FFTMagnitude.h"
 
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
 // some useful events
@@ -58,7 +58,9 @@ void BasicDrawPane::paintNow()
 void BasicDrawPane::render(wxDC&  dc)
 {
 	if (mBmp.IsOk())
-		dc.DrawBitmap(mBmp, 0,0);
+	{
+		dc.DrawBitmap(mBmp, 0, 0);
+	}
 }
 
 
@@ -68,6 +70,8 @@ bool BasicDrawPane::OnLoadImage(wxString &rPath)
 	wxImageHandler * bmpLoader = new wxBMPHandler();
 	wxImage::AddHandler(bmpLoader);
 	mBmp.LoadFile(rPath, wxBITMAP_TYPE_BMP);
+	BinaryImage img(mBmp.Scale(64, 64));
+	mBmp = FTFrequency::FTransform(img).GetAsImage(mBmp).Scale(300, 300);
 	paintNow();
 	//delete bmpLoader;
 	return mBmp.IsOk();

@@ -37,5 +37,11 @@
     <ClInclude Include="..\header\LearningData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\header\Complex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\header\FFTMagnitude.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

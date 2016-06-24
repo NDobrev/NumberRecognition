@@ -1,13 +1,7 @@
 #pragma once
 #include "vector"
 
-struct Complex
-{
-	double m_Real;
-	double m_Imag;
-	Complex() : m_Real(0), m_Imag(0) {}
-};
-
+#include "../header/Complex.h"
 class FFT
 {
 	public:

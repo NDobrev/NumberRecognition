@@ -79,6 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>C:\wxWidgets-3.1.0\lib\vc_lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\wxWidgets-3.1.0\include\msvc;C:\wxWidgets-3.1.0\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -121,6 +123,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\include\msvc;C:\wxWidgets-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UndefinePreprocessorDefinitions>WXUSINGDLL</UndefinePreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,8 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\header\BinaryImage.h" />
+    <ClInclude Include="..\header\Complex.h" />
     <ClInclude Include="..\header\DrawPane.h" />
     <ClInclude Include="..\header\FFT.h" />
+    <ClInclude Include="..\header\FFTMagnitude.h" />
     <ClInclude Include="..\header\LearningData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
