@@ -1,6 +1,6 @@
 #pragma once
 #include <wx\image.h>
-#include "../header/Complex.h"
+
 class BinaryImage
 {
 	public:
@@ -21,13 +21,14 @@ class BinaryImage
 			for (short j = 0; j < mW; ++j)
 			{
 				float data = (0.299 * (float)rBmp.GetRed(j, i) + 0.587 * (float)rBmp.GetGreen(j, i) + 0.114 * (float)rBmp.GetBlue(j, i));
+				assert(i * mW + j < mW * mH);
 				mData[i * mW + j] = data ;
 			}
 	}
 
 	~BinaryImage()
 	{
-		//delete []mData;
+		delete []mData;
 	}
 
 	bool IsSquare() const
@@ -37,11 +38,13 @@ class BinaryImage
 
 	void Set(short h, short w, unsigned char intensity)
 	{
+		assert(mW *h + w < mW * mH);
 		mData[mW * h + w] = intensity;
 	}
 
 	unsigned char  Get(short h, short w) const
 	{
+		assert(mW *h + w < mW * mH);
 		return mData[mW *h + w];
 	}
 
@@ -58,27 +61,14 @@ class BinaryImage
 		for (short i = 0; i < mH; ++i)
 			for (short j = 0; j < mW; ++j)
 			{
+				assert(i * mW + j < mW * mH);
 				unsigned char data = mData[i * mW + j];
 				rResult.SetRGB(j, i,data, data, data);
 			}
 		return rResult;
 	}
 
-	Complex** GetAsComplex() const
-	{
-		Complex **result;
-		result = new Complex*[mW];
-		for (short i = 0; i < mH; ++i)
-		{
-			result[i] = new Complex[mW];
-			for (short j = 0; j < mW; ++j)
-			{
-				result[i][j].m_Imag = 0.f;
-				result[i][j].m_Real = mData[i * mW + j];
-			}
-		}
-		return result;
-	}
+	wxSize GetSize() const { return wxSize(mW, mH); }
 
 	short GetW() const
 	{
@@ -89,6 +79,8 @@ class BinaryImage
 	{
 		return mH;
 	}
+
+	
 
 	private:
 		short mW;

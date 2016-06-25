@@ -4,6 +4,7 @@
 #include "../header/DrawPane.h"
 #include "../header/BinaryImage.h"
 #include "../header/FFTMagnitude.h"
+#include "../header/FFTMagnitude.h"
 
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
 // some useful events
@@ -64,14 +65,15 @@ void BasicDrawPane::render(wxDC&  dc)
 }
 
 
-bool BasicDrawPane::OnLoadImage(wxString &rPath)
+bool BasicDrawPane::OnFFT(wxString &rPath)
 {
 
 	wxImageHandler * bmpLoader = new wxBMPHandler();
 	wxImage::AddHandler(bmpLoader);
 	mBmp.LoadFile(rPath, wxBITMAP_TYPE_BMP);
-	BinaryImage img(mBmp.Scale(64, 64));
-	mBmp = FTFrequency::FTransform(img).GetAsImage(mBmp).Scale(300, 300);
+	BinaryImage img(mBmp.Scale(SIZE_, SIZE_));
+	BinaryImage res(mBmp.Scale(SIZE_, SIZE_));
+	mBmp = FTFrequency::FTransform(img, res).GetAsImage(mBmp).Scale(300, 300);
 	paintNow();
 	//delete bmpLoader;
 	return mBmp.IsOk();

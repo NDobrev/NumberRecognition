@@ -12,7 +12,7 @@ class BasicDrawPane : public wxPanel
 		void paintNow();
 
 		void render(wxDC& dc);
-		bool OnLoadImage(wxString &rPath);
+		bool OnFFT(wxString &rPath);
 	private:
 		wxImage mBmp;
 		DECLARE_EVENT_TABLE()

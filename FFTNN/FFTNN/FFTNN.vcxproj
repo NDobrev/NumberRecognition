@@ -91,7 +91,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -121,7 +121,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\include\msvc;C:\wxWidgets-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UndefinePreprocessorDefinitions>WXUSINGDLL</UndefinePreprocessorDefinitions>
@@ -153,13 +153,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\header\NN.h" />
     <ClCompile Include="..\src\App.cpp" />
     <ClCompile Include="..\src\DrawPane.cpp" />
     <ClCompile Include="..\src\FFT.cpp" />
+    <ClCompile Include="..\src\LearningData.cpp" />
+    <ClCompile Include="..\src\NN.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\header\BinaryImage.h" />
-    <ClInclude Include="..\header\Complex.h" />
+    <ClInclude Include="..\header\DataEntry.h" />
     <ClInclude Include="..\header\DrawPane.h" />
     <ClInclude Include="..\header\FFT.h" />
     <ClInclude Include="..\header\FFTMagnitude.h" />

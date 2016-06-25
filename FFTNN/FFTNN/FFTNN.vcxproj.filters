@@ -23,6 +23,15 @@
     <ClCompile Include="..\src\DrawPane.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\header\NN.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LearningData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\header\FFT.h">
@@ -37,10 +46,10 @@
     <ClInclude Include="..\header\LearningData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\header\Complex.h">
+    <ClInclude Include="..\header\FFTMagnitude.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\header\FFTMagnitude.h">
+    <ClInclude Include="..\header\DataEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

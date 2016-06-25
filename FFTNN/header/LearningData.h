@@ -3,43 +3,36 @@
 #include <wx/log.h>
 #include <vector>
 #include "../header/BinaryImage.h"
+#include "../header/FFTMagnitude.h"
+#include "../header/DataEntry.h"
 
 class LearningData
 {
 	public:
-		typedef std::vector<BinaryImage*> DataSet;
-		typedef std::vector<BinaryImage*>::const_iterator DataSetConstIter;
-		typedef std::vector<BinaryImage*>::iterator DataSetIter;
-		LearningData(wxString& rDirPath)
+		struct Entry
 		{
-			wxDir dir(rDirPath);
-			if (!dir.IsOpened())
+			bool mbPositive;
+			BinaryImage* mExample;
+
+			~Entry()
 			{
-				wxLogError("Cannot open dir '%s'.", rDirPath);
-				return;
+				delete mExample;
 			}
+		};
+		typedef std::vector<Entry*> DataSet;
+		typedef std::vector<Entry*>::const_iterator DataSetConstIter;
+		typedef std::vector<Entry*>::iterator DataSetIter;
 
-			wxString filename;
-			bool cont = dir.GetFirst(&filename, "", wxDIR_FILES);
-			while (cont)
-			{
-				wxImageHandler * bmpLoader = new wxBMPHandler();
-				wxImage::AddHandler(bmpLoader);
-				wxImage bmp(filename, wxBITMAP_TYPE_BMP);
-				if (bmp.IsOk())
-					dataSet.push_back(new BinaryImage(bmp));
-				cont = dir.GetNext(&filename);
-			}
-		}
+		//return new double arr 
+		static double * GetDataFromFFTImage(const BinaryImage *res);
+		LearningData(wxString& rDirPath);
+		~LearningData();
+		void LoadExample(wxString& rDirPath, bool bPositive);
+		void SaveInDir(wxString& rDirPath);
+		std::vector<DataEntry *>& GenerateDataEntries(std::vector<DataEntry *> &rResult);
 
-		LearningData()
-		{
-			for (DataSetIter it = dataSet.begin(); it != dataSet.end(); ++it)
-				delete *it;
-		}
-
-		DataSetConstIter GetBeg() { dataSet.begin(); }
-		DataSetConstIter GetEnd() { dataSet.end(); }
+		DataSetConstIter GetBeg() { mDataSet.begin(); }
+		DataSetConstIter GetEnd() { mDataSet.end(); }
 	private:
-		DataSet dataSet;
+		DataSet mDataSet;
 };
