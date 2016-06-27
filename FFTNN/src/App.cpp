@@ -166,8 +166,8 @@ static inline double* GetNNInputByFile(wxString file)
 	wxImageHandler * bmpLoader = new wxBMPHandler();
 	wxImage::AddHandler(bmpLoader);
 	wxImage bmp(file, wxBITMAP_TYPE_BMP);
-	BinaryImage img(bmp.Scale(SIZE_FFT, SIZE_FFT));
-	BinaryImage *res = new BinaryImage(SIZE_FFT, SIZE_FFT);
+	BinaryImage<double> img(bmp.Scale(SIZE_FFT, SIZE_FFT));
+	BinaryImage<double> *res = new BinaryImage<double>(SIZE_FFT, SIZE_FFT);
 	FTFrequency::FTransform(img, *res);
 	return LearningData::GetDataFromFFTImage(res);
 }
@@ -300,10 +300,10 @@ void MyFrame::OnTrainNNs(wxCommandEvent& event)
 		std::vector<DataEntry*> training;
 		std::vector<DataEntry*> testing;
 		GenTrainingInputData(LearningSets, training, testing, i);
-		NeuralNetwork nn(_INPUT_NN_SIZE*_INPUT_NN_SIZE, 2* _INPUT_NN_SIZE*_INPUT_NN_SIZE, 1);
-		nn.SetMaxEpochs(100000);
-		nn.SetDesiredAccuracy(93);
-		nn.SetLearningParameters(0.001, 0.9);
+		NeuralNetwork nn(_INPUT_NN_SIZE*_INPUT_NN_SIZE, 3* _INPUT_NN_SIZE*_INPUT_NN_SIZE, 1);
+		nn.SetMaxEpochs(50000);
+		nn.SetDesiredAccuracy(90);
+		nn.SetLearningParameters(0.0001, 0.8);
 		vector<double > trainingErrHistory;
 		nn.TrainNetwork(training, testing, testing, trainingErrHistory);
 		nn.WriteToFile(opedDirTrainingSet.GetPath() + "/" + LearningSets[i]->name + ".nn");

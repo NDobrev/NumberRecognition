@@ -35,9 +35,9 @@ void LearningData::LoadExample(wxString& rDirPath, bool bPositive)
 		if (bmp.IsOk())
 		{
 
-			BinaryImage img(bmp.Scale(SIZE_FFT, SIZE_FFT));
-			BinaryImage *res = new BinaryImage(SIZE_FFT, SIZE_FFT);
-			FTFrequency::FTransform(img, *res);
+			BinaryImage<double> img(bmp.Scale(SIZE_FFT, SIZE_FFT));
+			BinaryImage<double> *res = new BinaryImage<double>(SIZE_FFT, SIZE_FFT);
+			FTFrequency::FTransform<double>(img, *res);
 			mDataSet.push_back(new Entry{ bPositive, res  });
 		}
 		cont = dir.GetNext(&filename);
@@ -88,7 +88,7 @@ void LearningData::GetExamples(size_t from, size_t to, double desireOutput, std:
 	}
 }
 
-double * LearningData::GetDataFromFFTImage(const BinaryImage *res)
+double * LearningData::GetDataFromFFTImage(const BinaryImage<double> *res)
 {
 	//sq 
 	double *pInput = new double[_INPUT_NN_SIZE*_INPUT_NN_SIZE];

@@ -9,7 +9,8 @@ class FTFrequency
 {
 public:
 	// output onlt Frequency
-	static BinaryImage& FTransform(const BinaryImage& image, BinaryImage& result)
+	template<typename T>
+	static BinaryImage<T>& FTransform(const BinaryImage<T>& image, BinaryImage<T>& result)
 	{
 		assert(image.IsSquare() && result.GetH() == image.GetH());
 		assert(result.GetH() == SIZE_FFT);

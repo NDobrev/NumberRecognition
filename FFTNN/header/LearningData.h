@@ -12,7 +12,7 @@ class LearningData
 		struct Entry
 		{
 			bool mbPositive;
-			BinaryImage* mExample;
+			BinaryImage<double>* mExample;
 
 			~Entry()
 			{
@@ -24,7 +24,7 @@ class LearningData
 		typedef std::vector<Entry*>::iterator DataSetIter;
 
 		//return new double arr 
-		static double * GetDataFromFFTImage(const BinaryImage *res);
+		static double * GetDataFromFFTImage(const BinaryImage<double> *res);
 		LearningData(wxString& rDirPath);
 		~LearningData();
 		void GetExamples(size_t from, size_t to, double desireOutput,std::vector<DataEntry *> &rResult);
