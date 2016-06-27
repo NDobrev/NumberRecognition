@@ -2,9 +2,8 @@
 #include <complex>
 #include <cmath>
 #include "../header/BinaryImage.h"
+#include "../header/Constants.h"
 
-#define PI2 6.28318530718f
-#define SIZE_ 25
 using namespace std::complex_literals;
 class FTFrequency
 {
@@ -13,11 +12,11 @@ public:
 	static BinaryImage& FTransform(const BinaryImage& image, BinaryImage& result)
 	{
 		assert(image.IsSquare() && result.GetH() == image.GetH());
-		assert(result.GetH() == SIZE_);
+		assert(result.GetH() == SIZE_FFT);
 		short N = image.GetH();
 		double normalizer = 1.f / N;
 		//actualy must by 25x25
-		double arr[SIZE_][SIZE_];
+		double arr[SIZE_FFT][SIZE_FFT];
 		double maxMagnitude = 0;
 		for (short k = 0; k < N; ++k)
 			#pragma omp parallel
@@ -41,8 +40,8 @@ public:
 				arr[(k + N / 2) % N][(l + N / 2) % N] = sq;
 			}
 		double coef = 255. / log10(1 + fabs(maxMagnitude*  0.01));
-		for (short i = 0; i < SIZE_; ++i)
-			for (short j = 0; j < SIZE_; ++j)
+		for (short i = 0; i < SIZE_FFT; ++i)
+			for (short j = 0; j < SIZE_FFT; ++j)
 			{
 				double lg = coef * log10(arr[i][j] * 0.01);
 				lg = lg < 0 ? 0. : lg;

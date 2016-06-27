@@ -27,10 +27,11 @@ class LearningData
 		static double * GetDataFromFFTImage(const BinaryImage *res);
 		LearningData(wxString& rDirPath);
 		~LearningData();
+		void GetExamples(size_t from, size_t to, double desireOutput,std::vector<DataEntry *> &rResult);
 		void LoadExample(wxString& rDirPath, bool bPositive);
 		void SaveInDir(wxString& rDirPath);
 		std::vector<DataEntry *>& GenerateDataEntries(std::vector<DataEntry *> &rResult);
-
+		size_t GetSize() { return mDataSet.size(); }
 		DataSetConstIter GetBeg() { mDataSet.begin(); }
 		DataSetConstIter GetEnd() { mDataSet.end(); }
 	private:

@@ -52,5 +52,8 @@
     <ClInclude Include="..\header\DataEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\header\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

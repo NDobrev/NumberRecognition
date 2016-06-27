@@ -9,7 +9,7 @@ NeuralNetwork::NeuralNetwork()
 
 NeuralNetwork::NeuralNetwork(int in, int hidden, int out)
 	:
-	nInput(in),
+	nInput(in), 
 	nHidden(hidden),
 	nOutput(out),
 	epoch(0),
@@ -24,64 +24,65 @@ NeuralNetwork::NeuralNetwork(int in, int hidden, int out)
 	generalizationSetMSE(0),
 	bOnlyForUsage(false)
 {
+	srand((unsigned int)time(0));
 	//create neuron lists
 	//--------------------------------------------------------------------------------------------------------
-	inputNeurons = new(double[in + 1]);
+	inputNeurons.resize(in + 1);
 	for (int i = 0; i < in; i++) inputNeurons[i] = 0;
 
 	//create bias neuron
 	inputNeurons[in] = -1;
 
-	hiddenNeurons = new(double[hidden + 1]);
+	hiddenNeurons.resize(hidden + 1);
 	for (int i = 0; i < hidden; i++) hiddenNeurons[i] = 0;
 
 	//create bias neuron
 	hiddenNeurons[hidden] = -1;
 
-	outputNeurons = new(double[out]);
+	outputNeurons.resize(out);
 	for (int i = 0; i < out; i++) outputNeurons[i] = 0;
 
 	//create weight lists (include bias neuron weights)
 	//--------------------------------------------------------------------------------------------------------
-	wInputHidden = new(double*[in + 1]);
+	wInputHidden.resize(in + 1);
 	for (int i = 0; i <= in; i++)
 	{
-		wInputHidden[i] = new (double[hidden]);
+		wInputHidden[i].resize(hidden);
 		for (int j = 0; j < hidden; j++) 
 			wInputHidden[i][j] = 0;
 	}
 
-	wHiddenOutput = new(double*[hidden + 1]);
+	wHiddenOutput.resize(hidden + 1);
 	for (int i = 0; i <= hidden; i++)
 	{
-		wHiddenOutput[i] = new (double[out]);
+		wHiddenOutput[i].resize(out);
 		for (int j = 0; j < out; j++) 
 			wHiddenOutput[i][j] = 0;
 	}
 
-	deltaInputHidden = new(double*[in + 1]);
+	deltaInputHidden.resize(in + 1);
 	for (int i = 0; i <= in; i++)
 	{
-		deltaInputHidden[i] = new (double[hidden]);
+		deltaInputHidden[i].resize(hidden);
 		for (int j = 0; j < hidden; j++)
 			deltaInputHidden[i][j] = 0;
 	}
 
-	deltaHiddenOutput = new(double*[hidden + 1]);
+	deltaHiddenOutput.resize(hidden + 1);
 	for (int i = 0; i <= hidden; i++)
 	{
-		deltaHiddenOutput[i] = new (double[out]);
+		deltaHiddenOutput[i].resize(out);
 		for (int j = 0; j < out; j++)
 			deltaHiddenOutput[i][j] = 0;
 	}
 
 	//create error gradient storage
 	//--------------------------------------------------------------------------------------------------------
-	hiddenErrorGradients = new(double[hidden + 1]);
+	hiddenErrorGradients.resize(hidden + 1);
 	for (int i = 0; i <= hidden; i++)
 		hiddenErrorGradients[i] = 0;
-
-	outputErrorGradients = new(double[out + 1]);
+	 
+	outputErrorGradients.resize(out + 1);
 	for (int i = 0; i <= out; i++)
 		outputErrorGradients[i] = 0;
 
@@ -106,30 +107,22 @@ bool NeuralNetwork::ReadFromFile(const wxString &filePath)
 		return false;
 	is >> nInput >> nHidden >> nOutput;
 
-	inputNeurons = new double[nInput];
-	for (short i = 0; i < nInput; ++i)
-		is >> inputNeurons[i];
-
-	hiddenNeurons = new double[nHidden];
-	for (short i = 0; i < nHidden; ++i)
-		is >> hiddenNeurons[i];
-
-	outputNeurons = new double[nOutput];
-	for (int i = 0; i < nOutput; ++i)
-		is >> outputNeurons[i];
-
-	wInputHidden = new double*[nHidden];
+	inputNeurons.resize(nInput + 1);
+	hiddenNeurons.resize(nHidden + 1);
+	outputNeurons.resize(nOutput + 1);
+	
+	wInputHidden.resize(nInput+1);
 	for (int i = 0; i <= nInput; i++)
 	{
-		wInputHidden[i] = new double[nInput];
+		wInputHidden[i].resize(nHidden);
 		for (int j = 0; j < nHidden; j++)
 			is >> wInputHidden[i][j];
 	}
 
-	wHiddenOutput = new double*[nHidden];
+	wHiddenOutput.resize(nHidden+1);
 	for (int i = 0; i <= nHidden; i++)
 	{
-		wHiddenOutput[i] = new double[nOutput];
+		wHiddenOutput[i].resize(nOutput);
 		for (int j = 0; j < nOutput; j++)
 			is >> wHiddenOutput[i][j];
 	}
@@ -139,31 +132,20 @@ bool NeuralNetwork::ReadFromFile(const wxString &filePath)
 bool NeuralNetwork::WriteToFile(const wxString &filePath)
 {
 	std::ofstream ofs;
-	ofs.open(filePath.c_str().AsChar(), std::ofstream::out |  std::ofstream::binary);
+	ofs.open(filePath.c_str().AsChar(), std::ofstream::out);
 
-	ofs << nInput << nHidden << nOutput;
-
-
-	for (short i = 0; i < nInput; ++i)
-		ofs << inputNeurons[i];
-
-	for (short i = 0; i < nHidden; ++i)
-		ofs << hiddenNeurons[i];
-
-
-	for (int i = 0; i < nOutput; ++i)
-		ofs << outputNeurons[i];
+	ofs << nInput << " " << nHidden << " " << nOutput << " ";
 
 	for (int i = 0; i <= nInput; i++)
 	{
 		for (int j = 0; j < nHidden; j++)
-			ofs << wInputHidden[i][j];
+			ofs << wInputHidden[i][j] << " ";
 	}
 
 	for (int i = 0; i <= nHidden; i++)
 	{
 		for (int j = 0; j < nOutput; j++)
-			ofs << wHiddenOutput[i][j];
+			ofs << wHiddenOutput[i][j] << " ";
 	}
 	return true;
 }
@@ -173,30 +155,6 @@ bool NeuralNetwork::WriteToFile(const wxString &filePath)
 
 NeuralNetwork::~NeuralNetwork()
 {
-	delete[] inputNeurons;
-	delete[] hiddenNeurons;
-	delete[] outputNeurons;
-
-	for (int i = 0; i <= nInput; i++) 
-		delete[] wInputHidden[i];
-	delete[] wInputHidden;
-
-	for (int j = 0; j <= nHidden; j++)
-		delete[] wHiddenOutput[j];
-	delete[] wHiddenOutput;
-	if (!bOnlyForUsage)
-	{
-		for (int i = 0; i <= nInput; i++)
-			delete[] deltaInputHidden[i];
-		delete[] deltaInputHidden;
-
-		for (int j = 0; j <= nHidden; j++) delete[]
-			deltaHiddenOutput[j];
-		delete[] deltaHiddenOutput;
-
-		delete[] hiddenErrorGradients;
-		delete[] outputErrorGradients;
-	}
 	if (logFile.is_open()) logFile.close();
 }
 
@@ -253,24 +211,24 @@ void NeuralNetwork::ResetWeights()
 	InitializeWeights();
 }
 
-double* NeuralNetwork::FeedInput(double* inputs)
+const vector<double>& NeuralNetwork::FeedInput(double* inputs)
 {
 	FeedForward(inputs);
 	return outputNeurons;
 }
-
-void NeuralNetwork::TrainNetwork(vector<DataEntry*> trainingSet, vector<DataEntry*> generalizationSet, vector<DataEntry*> validationSet)
+ 
+void NeuralNetwork::TrainNetwork(vector<DataEntry*>& trainingSet,
+								vector<DataEntry*>& generalizationSet, 
+								vector<DataEntry*>& validationSet,
+								vector<double>& trainingErrorHistory)
 {
-	//cout << endl << " Neural Network Training Starting: " << endl
-	//	<< "==========================================================================" << endl
-	//	<< " LR: " << learningRate << ", Momentum: " << momentum << ", Max Epochs: " << maxEpochs << endl
-	//	<< " " << nInput << " Input Neurons, " << nHidden << " Hidden Neurons, " << nOutput << " Output Neurons" << endl
-	//	<< "==========================================================================" << endl << endl;
 
 	epoch = 0;
 	lastEpochLogged = -logResolution;
-
-	while ((trainingSetAccuracy < desiredAccuracy || generalizationSetAccuracy < desiredAccuracy) && epoch < maxEpochs)
+	trainingErrorHistory.push_back(1.);
+	//vector<double> trainHistory;
+	//vector<double> genHistory;
+	while ((1. - generalizationSetMSE < desiredAccuracy) && epoch < maxEpochs)
 	{
 		double previousTAccuracy = trainingSetAccuracy;
 		double previousGAccuracy = generalizationSetAccuracy;
@@ -279,36 +237,22 @@ void NeuralNetwork::TrainNetwork(vector<DataEntry*> trainingSet, vector<DataEntr
 
 		generalizationSetAccuracy = GetSetAccuracy(generalizationSet);
 		generalizationSetMSE = GetSetMSE(generalizationSet);
-
-		//if (logResults && logFile.is_open() && (epoch - lastEpochLogged == logResolution))
-		//{
-		//	logFile << epoch << "," << trainingSetAccuracy << "," << generalizationSetAccuracy << "," << trainingSetMSE << "," << generalizationSetMSE << endl;
-		//	lastEpochLogged = epoch;
-		//}
-
-		//if (ceil(previousTAccuracy) != ceil(trainingSetAccuracy) || ceil(previousGAccuracy) != ceil(generalizationSetAccuracy))
-		//{
-		//	//cout << "Epoch :" << epoch;
-		//	//cout << " TSet Acc:" << trainingSetAccuracy << "%, MSE: " << trainingSetMSE;
-		//	//cout << " GSet Acc:" << generalizationSetAccuracy << "%, MSE: " << generalizationSetMSE << endl;
-		//}
+	   if ((fabs(trainingErrorHistory[trainingErrorHistory.size() -1 ] - generalizationSetMSE) < 0.e-8)
+			&& maxEpochs - epoch > 0.1 * maxEpochs)
+			ResetWeights();
+		trainingErrorHistory.push_back(generalizationSetMSE);
+		//trainHistory.push_back(trainingSetAccuracy);
+		//genHistory.push_back(generalizationSetAccuracy);
 		epoch++;
 
-	}//end while
-
+	}
+	 
 	validationSetAccuracy = GetSetAccuracy(validationSet);
 	validationSetMSE = GetSetMSE(validationSet);
-/*	logFile << epoch << "," << trainingSetAccuracy << "," << generalizationSetAccuracy << "," << trainingSetMSE << "," << generalizationSetMSE << endl << endl;
-	logFile << "Training Complete!!! - > Elapsed Epochs: " << epoch << " Validation Set Accuracy: " << validationSetAccuracy << " Validation Set MSE: " << validationSetMSE << endl;
-	*///cout << endl << "Training Complete!!! - > Elapsed Epochs: " << epoch << endl;
-	//cout << " Validation Set Accuracy: " << validationSetAccuracy << endl;
-	//cout << " Validation Set MSE: " << validationSetMSE << endl << endl;
 }
-
-
+ 
 void NeuralNetwork::InitializeWeights()
 {
-	srand((unsigned int)time(0));
 	for (int i = 0; i <= nInput; i++)
 	{
 		for (int j = 0; j < nHidden; j++)
@@ -327,8 +271,8 @@ void NeuralNetwork::InitializeWeights()
 		}
 	}
 }
-
-void NeuralNetwork::RunTrainingEpoch(vector<DataEntry*> trainingSet)
+ 
+void NeuralNetwork::RunTrainingEpoch(vector<DataEntry*>& trainingSet)
 {
 	double incorrectPatterns = 0;
 	double mse = 0;
@@ -340,7 +284,8 @@ void NeuralNetwork::RunTrainingEpoch(vector<DataEntry*> trainingSet)
 		bool patternCorrect = true;
 		for (int k = 0; k < nOutput; k++)
 		{
-			if (GetRoundedOutputValue(outputNeurons[k]) != trainingSet[tp]->target[k]) patternCorrect = false;
+			if (fabs(outputNeurons[k] - trainingSet[tp]->target[k]) > 0.001)
+				patternCorrect = false;
 			mse += pow((outputNeurons[k] - trainingSet[tp]->target[k]), 2);
 		}
 		if (!patternCorrect) incorrectPatterns++;
@@ -349,7 +294,7 @@ void NeuralNetwork::RunTrainingEpoch(vector<DataEntry*> trainingSet)
 
 	if (useBatch)
 		UpdateWeights();
-	trainingSetAccuracy = 100 - (incorrectPatterns / trainingSet.size() * 100);
+	trainingSetAccuracy = 100. - (incorrectPatterns / (double)trainingSet.size()) * 100.;
 	trainingSetMSE = mse / (nOutput * trainingSet.size());
 }
 
@@ -458,7 +403,7 @@ int NeuralNetwork::GetRoundedOutputValue(double x)
 	else if (x > 0.9) return 1;
 	else return -1;
 }
-double NeuralNetwork::GetSetAccuracy(vector<DataEntry*> set)
+double NeuralNetwork::GetSetAccuracy(vector<DataEntry*>& set)
 {
 	double incorrectResults = 0;
 	for (int tp = 0; tp < (int)set.size(); tp++)
@@ -477,9 +422,9 @@ double NeuralNetwork::GetSetAccuracy(vector<DataEntry*> set)
 	}//end for
 
 		//calculate error and return as percentage
-	return 100 - (incorrectResults / set.size() * 100);
+	return 100. - (incorrectResults / double(set.size()) * 100.);
 }
-double NeuralNetwork::GetSetMSE(vector<DataEntry*> set)
+double NeuralNetwork::GetSetMSE(vector<DataEntry*>& set)
 {
 	double mse = 0;
 	for (int tp = 0; tp < (int)set.size(); tp++)

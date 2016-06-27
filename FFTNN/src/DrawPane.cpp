@@ -71,8 +71,8 @@ bool BasicDrawPane::OnFFT(wxString &rPath)
 	wxImageHandler * bmpLoader = new wxBMPHandler();
 	wxImage::AddHandler(bmpLoader);
 	mBmp.LoadFile(rPath, wxBITMAP_TYPE_BMP);
-	BinaryImage img(mBmp.Scale(SIZE_, SIZE_));
-	BinaryImage res(mBmp.Scale(SIZE_, SIZE_));
+	BinaryImage img(mBmp.Scale(SIZE_FFT, SIZE_FFT));
+	BinaryImage res(mBmp.Scale(SIZE_FFT, SIZE_FFT));
 	mBmp = FTFrequency::FTransform(img, res).GetAsImage(mBmp).Scale(300, 300);
 	paintNow();
 	//delete bmpLoader;

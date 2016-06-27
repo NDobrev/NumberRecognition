@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\header\BinaryImage.h" />
+    <ClInclude Include="..\header\Constants.h" />
     <ClInclude Include="..\header\DataEntry.h" />
     <ClInclude Include="..\header\DrawPane.h" />
     <ClInclude Include="..\header\FFT.h" />

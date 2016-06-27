@@ -18,16 +18,6 @@ using namespace std;
 #define MAX_EPOCHS 1500
 #define DESIRED_ACCURACY 90  
 
-/*******************************************************************************************************************
-*	NEURAL NETWORK CLASS
-*	----------------------------------------------------------------------------------------------------------------
-*	Classic Back-propagation Neural Network ( makes use of gradient descent )
-*	Can toggle between stochastic and batch learning
-*	----------------------------------------------------------------------------------------------------------------
-*	Author: Bobby Anguelov (banguelov@cs.up.ac.za)
-*	Downloaded From: takinginitiative.wordpress.co.za
-*******************************************************************************************************************/
-
 class NeuralNetwork
 {
 
@@ -45,13 +35,13 @@ private:
 	int nInput, nHidden, nOutput;
 
 	//neurons
-	double* inputNeurons;
-	double* hiddenNeurons;
-	double* outputNeurons;
+	vector<double> inputNeurons;
+	vector<double> hiddenNeurons;
+	vector<double> outputNeurons;
 
 	//weights
-	double** wInputHidden;
-	double** wHiddenOutput;
+	vector<vector<double>> wInputHidden;
+	vector<vector<double>>  wHiddenOutput;
 
 	//epoch counter
 	long epoch;
@@ -61,12 +51,12 @@ private:
 	double desiredAccuracy;
 
 	//change to weights
-	double** deltaInputHidden;
-	double** deltaHiddenOutput;
+	vector<vector<double>>  deltaInputHidden;
+	vector<vector<double>>  deltaHiddenOutput;
 
 	//error gradients
-	double* hiddenErrorGradients;
-	double* outputErrorGradients;
+	vector<double> hiddenErrorGradients;
+	vector<double> outputErrorGradients;
 
 	//accuracy stats per epoch
 	double trainingSetAccuracy;
@@ -103,12 +93,15 @@ public:
 	void UseStochasticLearning();
 	void EnableLogging(const char* filename, int resolution = 1);
 	void ResetWeights();
-	double* FeedInput(double* inputs);
-	void TrainNetwork(vector<DataEntry*> trainingSet, vector<DataEntry*> generalizationSet, vector<DataEntry*> validationSet);
+	const vector<double>& FeedInput(double* inputs);
+	void TrainNetwork(vector<DataEntry*>& trainingSet,
+		vector<DataEntry*>& generalizationSet,
+		vector<DataEntry*>& validationSet,
+		vector<double>& trainingErrorHistory);
 private:
 
 	void InitializeWeights();
-	void RunTrainingEpoch(vector<DataEntry*> trainingSet);
+	void RunTrainingEpoch(vector<DataEntry*>& trainingSet);
 	void FeedForward(double *inputs);
 	void Backpropagate(double* desiredValues);
 	void UpdateWeights();
@@ -116,7 +109,7 @@ private:
 	inline double GetOutputErrorGradient(double desiredValue, double outputValue);
 	double GetHiddenErrorGradient(int j);
 	int GetRoundedOutputValue(double x);
-	double GetSetAccuracy(vector<DataEntry*> set);
-	double GetSetMSE(vector<DataEntry*> set);
+	double GetSetAccuracy(vector<DataEntry*>& set);
+	double GetSetMSE(vector<DataEntry*>& set);
 };
 

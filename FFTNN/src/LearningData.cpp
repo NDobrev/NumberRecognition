@@ -1,10 +1,11 @@
+#include "../header/FFTMagnitude.h"
 #include "../header/LearningData.h"
-
+#include "../header/Constants.h"
 
 LearningData::LearningData(wxString& rDirPath)
 {
 	LoadExample(rDirPath, true);
-	LoadExample(rDirPath + "/Neg", false);
+//	LoadExample(rDirPath + "/Neg", false);
 }
 
 LearningData::~LearningData()
@@ -34,8 +35,8 @@ void LearningData::LoadExample(wxString& rDirPath, bool bPositive)
 		if (bmp.IsOk())
 		{
 
-			BinaryImage img(bmp.Scale(25, 25));
-			BinaryImage *res = new BinaryImage(25, 25);
+			BinaryImage img(bmp.Scale(SIZE_FFT, SIZE_FFT));
+			BinaryImage *res = new BinaryImage(SIZE_FFT, SIZE_FFT);
 			FTFrequency::FTransform(img, *res);
 			mDataSet.push_back(new Entry{ bPositive, res  });
 		}
@@ -75,14 +76,28 @@ std::vector<DataEntry *>& LearningData::GenerateDataEntries(std::vector<DataEntr
 	return rResult;
 }
 
+void LearningData::GetExamples(size_t from, size_t to, double desireOutput, std::vector<DataEntry *> &rResult)
+{
+	assert(from < to && to <= mDataSet.size());
+	for (; from < to; ++from)
+	{
+		double *pInput = GetDataFromFFTImage(mDataSet[from]->mExample);
+		double *pOutput = new double[1];
+		pOutput[0] = desireOutput;
+		rResult.push_back(new DataEntry(pInput, pOutput));
+	}
+}
+
 double * LearningData::GetDataFromFFTImage(const BinaryImage *res)
 {
-	// 5 x 5 sq 
-	double *pInput = new double[25];
-	for (short i = 0; i < 5; ++i)
-		for (short j = 0; j < 5; j++)
+	//sq 
+	double *pInput = new double[_INPUT_NN_SIZE*_INPUT_NN_SIZE];
+	for (short i = 0; i < _INPUT_NN_SIZE; ++i)
+		for (short j = 0; j < _INPUT_NN_SIZE; j++)
 		{
-			pInput[i * 5 + j] = res->Get(10 + i, 10 + j);
+			pInput[i * _INPUT_NN_SIZE + j] = res->Get((SIZE_FFT - _INPUT_NN_SIZE) /2 + i,
+														(SIZE_FFT - _INPUT_NN_SIZE) / 2 + j);
 		}
 	return pInput;
 }
+
